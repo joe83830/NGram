@@ -45,26 +45,37 @@ int main() {
     while (true){
         //stuff into Map
 
-        Vector<string> BigWindow = Window.subList(0, N-1);
+        //Vector<string> BigWindow = Window.subList(0, N-1);
         Vector<string> SmallWindow = Window.subList(N-1,1);
         Vector<string> Retreive;
 
-        if (!Collection.containsKey(BigWindow.toString())){
+        string temporary = Window[0];
 
-            Collection.put(BigWindow.toString(), SmallWindow);
-        } else {
-            Retreive = Collection.get(BigWindow.toString());
-            Retreive.add(SmallWindow.toString());
-            Collection.put(BigWindow.toString(), Retreive);
+        for (int extract = 1; extract < N-1; extract++){
+
+            temporary = temporary + ", " + Window[extract];
         }
 
-        cout << "Window is now: " << Window.toString() << endl;
+        if (!Collection.containsKey(temporary)){
+
+
+            Collection.put(temporary, SmallWindow);
+
+        } else {
+            Retreive = Collection.get(temporary);
+            Retreive.add(Window[N-1]);
+            Collection.put(temporary, Retreive);
+        }
+
+
+//        cout << "Window is now: " << Window.toString() << endl;
 
         Window.remove(0);
         in >> word;
         Window.add(word);
 
-        cout << "Keys in Collection " << Collection.keys().toString() << endl;
+//        cout << "Keys in Collection " << Collection.keys().toString() << endl;
+//        cout << "Values in Collection" << Collection.values().toString() << endl;
 
 
         if (in.fail()){
@@ -78,7 +89,7 @@ int main() {
 
     //Loop thru the vector and stuff the words into a map.
 
-
+    cout << "The value of to be is: " << Collection.get("to, be").toString() << endl;
     cout << "Exiting." << endl;
 
     return 0;
