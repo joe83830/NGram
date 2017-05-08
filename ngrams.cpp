@@ -12,11 +12,12 @@
 #include "strlib.h"
 #include "vector.h"
 #include "map.h"
+#include "random.h"
 
 using namespace std;
 
 Map<string, Vector<string> > BuildCollection(int &N, ifstream &in);
-string GenerateRandom(Map<string, Vector<string> > Collection);
+string GenerateRandom(Map<string, Vector<string> > &Col, int &N2);
 
 int main() {
 
@@ -41,15 +42,14 @@ int main() {
     Map<string, Vector<string> > Col;
     Col = BuildCollection(N, in);
 
-    Vector<string> temp = Col.keys();
-    cout << "The keys are" << temp.toString() << endl;
+    string Number2 = getLine("# of random words to generate (0 to quit)? ");
+    int N2 = stringToInteger(Number2);
 
-    cout << "The value of to be is: " << Col.get("to, be").toString() << endl;
-    cout << "Exiting." << endl;
+    //Call GenerateRandom
+    cout << ". . ." << GenerateRandom(Col, N2) << ". . ." << endl;
 
     return 0;
 }
-
 
 Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
 
@@ -99,6 +99,7 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
         cout << "Values in Collection" << Collection.values().toString() << endl;
 
 
+        //How to wrap around?
         if (in.fail()){
 
             break;
@@ -109,9 +110,17 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
     return Collection;
 }
 
-//string GenerateRandom (Map<string, Vector<string> > Collection){
+string GenerateRandom (Map<string, Vector<string> > &Col, int &N2){
 
 
-//}
+    Vector<string> KeyVec = Col.keys();
+    int shuffle = randomInteger(0, KeyVec.size());
+    string start = KeyVec.get(shuffle);
+
+
+///////////////////////////////////
+    string TemporaryString = "abc";
+    return TemporaryString;
+}
 
 
