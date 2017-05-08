@@ -15,8 +15,11 @@
 
 using namespace std;
 
+Map<string, Vector<string> > BuildCollection(int &N, ifstream &in);
+string GenerateRandom(Map<string, Vector<string> > Collection);
+
 int main() {
-    Map<string, Vector<string> > Collection;
+
     ifstream in;
     while (true){
 
@@ -31,10 +34,28 @@ int main() {
 
     }
 
-    string word;
-    Vector<string> Window;
     string Number = getLine("N = ? ");
     int N = stringToInteger(Number);
+
+    //Call BuildCollection
+    Map<string, Vector<string> > Col;
+    Col = BuildCollection(N, in);
+
+    Vector<string> temp = Col.keys();
+    cout << "The keys are" << temp.toString() << endl;
+
+    cout << "The value of to be is: " << Col.get("to, be").toString() << endl;
+    cout << "Exiting." << endl;
+
+    return 0;
+}
+
+
+Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
+
+    Map<string, Vector<string> > Collection;
+    string word;
+    Vector<string> Window;
 
     for (int i = 0; i < N; i++){
 
@@ -68,14 +89,14 @@ int main() {
         }
 
 
-//        cout << "Window is now: " << Window.toString() << endl;
+        cout << "Window is now: " << Window.toString() << endl;
 
         Window.remove(0);
         in >> word;
         Window.add(word);
 
-//        cout << "Keys in Collection " << Collection.keys().toString() << endl;
-//        cout << "Values in Collection" << Collection.values().toString() << endl;
+        cout << "Keys in Collection " << Collection.keys().toString() << endl;
+        cout << "Values in Collection" << Collection.values().toString() << endl;
 
 
         if (in.fail()){
@@ -84,15 +105,13 @@ int main() {
         }
 
     }
-    Vector<string> temp = Collection.keys();
-    //cout << "The keys are" << temp.toString() << endl;
 
-    //Loop thru the vector and stuff the words into a map.
-
-    cout << "The value of to be is: " << Collection.get("to, be").toString() << endl;
-    cout << "Exiting." << endl;
-
-    return 0;
+    return Collection;
 }
+
+//string GenerateRandom (Map<string, Vector<string> > Collection){
+
+
+//}
 
 
