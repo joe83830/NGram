@@ -86,14 +86,14 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
         }
 
 
-        cout << "Window is now: " << Window.toString() << endl;
+        //cout << "Window is now: " << Window.toString() << endl;
 
         Window.remove(0);
         in >> word;
         Window.add(word);
 
-        cout << "Keys in Collection " << Collection.keys().toString() << endl;
-        cout << "Values in Collection" << Collection.values().toString() << endl;
+        //cout << "Keys in Collection " << Collection.keys().toString() << endl;
+        //cout << "Values in Collection" << Collection.values().toString() << endl;
 
 
         //How to wrap around?
@@ -109,30 +109,89 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
 
 string GenerateRandom (Map<string, Vector<string> > &Col, int &N2, int &N){
 
+    Vector<string> Keys = Col.keys();
+    int shuffle = randomInteger(0, Keys.size()-1);
+    string FirstKey = Keys.get(shuffle);
+    //stuff first key into the result first
+    Vector<string> DividedFirstKey = stringSplit(FirstKey, ", ");
+    string result;
+    for (int i = 0; i < DividedFirstKey.size(); i++){
 
-    Vector<string> KeyVec = Col.keys();  //got a vector of the keys of Col
-    int shuffle = randomInteger(0, KeyVec.size()-1);  //Generate a random index number
-    string start = KeyVec.get(shuffle);    //picked a random key out of the vector of keys
-    string final;
-
-    for (int j = 0; j < N2-N; j++){  //j needs to be changed
-
-        Vector<string> Begin = Col.get(start);  //extracted the value(which is a vector) associated with the key
-        int shuffle2 = randomInteger(0, Begin.size()-1); //generate a random index number
-        string next = Begin.get(shuffle2); //take a random string from the vector(which is the value of the map)
-
-        Vector<string> purify = stringSplit(start, ", ");  //starts with these words
-
-        for (int i = 0; i < purify.size()-1; i++){
-            final = final + " " + purify[i];
-        }
-        final = final + " " + next;
-        Begin.remove(0);
-        Begin.add(next);
+        result = result + " " + DividedFirstKey[i];
     }
+
+    //Find next value
+    for (int j = 0; j < N2-N; j++){
+
+        Vector<string> GetValues = Col.get(FirstKey);
+        int shuffle2 = randomInteger(0, GetValues.size()-1);
+
+        //cout << "This is GetValues" << GetValues.toString() << endl;
+
+//        cout << "this is shuffle2 " << shuffle2 << endl;
+
+        string next = GetValues.get(shuffle2);
+
+        //Add next to result
+        result = result + " " + next;
+        //remove the first item in devidedfirstkey
+
+        DividedFirstKey.remove(0);
+        DividedFirstKey.add(next);
+        //rebuild firstkey from devidedfirstkey
+
+        FirstKey = DividedFirstKey[0];
+        for (int k = 1; k < DividedFirstKey.size(); k++){
+
+            FirstKey = FirstKey + ", " + DividedFirstKey[k];
+        }
+        cout << "This is firstkey" << FirstKey << endl;
+    }
+
+//    Vector<string> KeyVec = Col.keys();  //got a vector of the keys of Col
+//    cout << "These are the keys of Col" << KeyVec.toString() << endl;
+
+//    int shuffle = randomInteger(0, KeyVec.size()-1);  //Generate a random index number
+
+//    string start = KeyVec.get(shuffle);    //picked a random key out of the vector of keys
+//    cout << "This is the start " << start << endl;
+
+//    string middle;
+//    string final;
+
+
+
+//    Vector<string> purify = stringSplit(start, ", ");  //split start into a vector
+//    for (int i = 0; i < purify.size(); i++){
+//        cout << "Purify[i] = " << purify[i] << endl;
+//        final = final + " " + purify[i];
+//    }
+
+//    Vector<string> Begin = Col.get(start);  //extracted the value(which is a vector) associated with the key
+
+//    for (int j = 0; j < N2-N; j++){  //j needs to be changed
+
+//        Vector<string> Begin2 = Col.get(middle);  //extracted the value(which is a vector) associated with the key
+//        int shuffle2 = randomInteger(0, Begin2.size()-1); //generate a random index number
+//        string next = Begin2.get(shuffle2); //take a random string from the vector(which is the value of the map)
+
+//        cout << "purify size " << purify.size() << endl;
+//        cout << endl;
+
+//        final = final + " " + next;
+
+//        purify.remove(0);
+//        purify.add(next);
+
+//        for (int i = 0; i < purify.size(); i++){
+//            cout << "Purify[i] = " << purify[i] << endl;
+//            middle = middle + " " + purify[i];
+//        }
+
+//    }
     ///////////////////////////////////
 
-    return final;
+    return result;
 }
 
 
