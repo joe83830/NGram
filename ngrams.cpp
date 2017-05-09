@@ -15,6 +15,13 @@ using namespace std;
 Map<string, Vector<string> > BuildCollection(int &N, ifstream &in);
 string GenerateRandom(Map<string, Vector<string> > &Col, int &N2, int &N);
 
+bool is_number(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
+
 int main() {
 
     ifstream in;
@@ -31,18 +38,42 @@ int main() {
 
     }
 
-    string Number = getLine("N = ? ");
+    string Number;
+    while (true){
+        Number = getLine("N = ? ");
+        if (is_number(Number)){
+            break;
+        } else{
+
+            cout << "Please enter an Integer " << endl;
+        }
+    }
     int N = stringToInteger(Number);
 
     //Call BuildCollection
     Map<string, Vector<string> > Col;
     Col = BuildCollection(N, in);
 
-    string Number2 = getLine("# of random words to generate (0 to quit)? ");
-    int N2 = stringToInteger(Number2);
+    while (true){
 
-    //Call GenerateRandom
-    cout << ". . ." << GenerateRandom(Col, N2, N) << ". . ." << endl;
+        string Number2;
+        while (true){
+            Number2 = getLine("# of random words to generate (0 to quit)? ");
+            if (is_number(Number2)){
+                break;
+            } else {
+
+                cout << "Please enter an Integer " << endl;
+            }
+        }
+        int N2 = stringToInteger(Number2);
+
+        if (N2 == 0){
+            break;
+        }
+        //Call GenerateRandom
+        cout << ". . ." << GenerateRandom(Col, N2, N) << ". . ." << endl;
+    }
 
     return 0;
 }
@@ -53,19 +84,28 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
     string word;
     Vector<string> Window;
 
-    for (int i = 0; i < N; i++){
+    Vector<string> ManyWords;
+    while (true){
 
-        in >> word;
-        Window.add(word);
+        string NewWord;
+        in >> NewWord;
+
+        if (NewWord.length() == 0){
+
+            break;
+        }
+        ManyWords.add(NewWord);
     }
 
-    while (true){
-        //stuff into Map
+    for (int i = 0; i < N; i++){
 
-        //Vector<string> BigWindow = Window.subList(0, N-1);
+        Window.add(ManyWords[i]);
+
+    }
+
+    for (int j = 0; j < ManyWords.size(); j++){
 
         Vector<string> SmallWindow = Window.subList(N-1,1);
-        Vector<string> Retreive;
 
         string temporary = Window[0];
 
@@ -76,31 +116,19 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
 
         if (!Collection.containsKey(temporary)){
 
-
             Collection.put(temporary, SmallWindow);
 
         } else {
+
+            Vector<string> Retreive;
             Retreive = Collection.get(temporary);
             Retreive.add(Window[N-1]);
             Collection.put(temporary, Retreive);
         }
 
-
-        //cout << "Window is now: " << Window.toString() << endl;
-
         Window.remove(0);
-        in >> word;
-        Window.add(word);
 
-        //cout << "Keys in Collection " << Collection.keys().toString() << endl;
-        //cout << "Values in Collection" << Collection.values().toString() << endl;
-
-
-        //How to wrap around?
-        if (in.fail()){
-
-            break;
-        }
+        Window.add(ManyWords[(j + N) % ManyWords.size()]);
 
     }
 
@@ -126,10 +154,6 @@ string GenerateRandom (Map<string, Vector<string> > &Col, int &N2, int &N){
         Vector<string> GetValues = Col.get(FirstKey);
         int shuffle2 = randomInteger(0, GetValues.size()-1);
 
-        //cout << "This is GetValues" << GetValues.toString() << endl;
-
-//        cout << "this is shuffle2 " << shuffle2 << endl;
-
         string next = GetValues.get(shuffle2);
 
         //Add next to result
@@ -145,51 +169,8 @@ string GenerateRandom (Map<string, Vector<string> > &Col, int &N2, int &N){
 
             FirstKey = FirstKey + ", " + DividedFirstKey[k];
         }
-        cout << "This is firstkey" << FirstKey << endl;
+
     }
-
-//    Vector<string> KeyVec = Col.keys();  //got a vector of the keys of Col
-//    cout << "These are the keys of Col" << KeyVec.toString() << endl;
-
-//    int shuffle = randomInteger(0, KeyVec.size()-1);  //Generate a random index number
-
-//    string start = KeyVec.get(shuffle);    //picked a random key out of the vector of keys
-//    cout << "This is the start " << start << endl;
-
-//    string middle;
-//    string final;
-
-
-
-//    Vector<string> purify = stringSplit(start, ", ");  //split start into a vector
-//    for (int i = 0; i < purify.size(); i++){
-//        cout << "Purify[i] = " << purify[i] << endl;
-//        final = final + " " + purify[i];
-//    }
-
-//    Vector<string> Begin = Col.get(start);  //extracted the value(which is a vector) associated with the key
-
-//    for (int j = 0; j < N2-N; j++){  //j needs to be changed
-
-//        Vector<string> Begin2 = Col.get(middle);  //extracted the value(which is a vector) associated with the key
-//        int shuffle2 = randomInteger(0, Begin2.size()-1); //generate a random index number
-//        string next = Begin2.get(shuffle2); //take a random string from the vector(which is the value of the map)
-
-//        cout << "purify size " << purify.size() << endl;
-//        cout << endl;
-
-//        final = final + " " + next;
-
-//        purify.remove(0);
-//        purify.add(next);
-
-//        for (int i = 0; i < purify.size(); i++){
-//            cout << "Purify[i] = " << purify[i] << endl;
-//            middle = middle + " " + purify[i];
-//        }
-
-//    }
-    ///////////////////////////////////
 
     return result;
 }
