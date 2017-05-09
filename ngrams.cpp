@@ -1,7 +1,3 @@
-// This is the CPP file you will edit and turn in.
-// Also remove these comments here and add your own.
-// TODO: remove this comment header
-
 #include <cctype>
 #include <cmath>
 #include <fstream>
@@ -17,7 +13,7 @@
 using namespace std;
 
 Map<string, Vector<string> > BuildCollection(int &N, ifstream &in);
-string GenerateRandom(Map<string, Vector<string> > &Col, int &N2);
+string GenerateRandom(Map<string, Vector<string> > &Col, int &N2, int &N);
 
 int main() {
 
@@ -46,7 +42,7 @@ int main() {
     int N2 = stringToInteger(Number2);
 
     //Call GenerateRandom
-    cout << ". . ." << GenerateRandom(Col, N2) << ". . ." << endl;
+    cout << ". . ." << GenerateRandom(Col, N2, N) << ". . ." << endl;
 
     return 0;
 }
@@ -67,6 +63,7 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
         //stuff into Map
 
         //Vector<string> BigWindow = Window.subList(0, N-1);
+
         Vector<string> SmallWindow = Window.subList(N-1,1);
         Vector<string> Retreive;
 
@@ -110,17 +107,32 @@ Map<string, Vector<string> > BuildCollection(int &N, ifstream &in){
     return Collection;
 }
 
-string GenerateRandom (Map<string, Vector<string> > &Col, int &N2){
+string GenerateRandom (Map<string, Vector<string> > &Col, int &N2, int &N){
 
 
-    Vector<string> KeyVec = Col.keys();
-    int shuffle = randomInteger(0, KeyVec.size());
-    string start = KeyVec.get(shuffle);
+    Vector<string> KeyVec = Col.keys();  //got a vector of the keys of Col
+    int shuffle = randomInteger(0, KeyVec.size()-1);  //Generate a random index number
+    string start = KeyVec.get(shuffle);    //picked a random key out of the vector of keys
+    string final;
 
+    for (int j = 0; j < N2-N; j++){  //j needs to be changed
 
-///////////////////////////////////
-    string TemporaryString = "abc";
-    return TemporaryString;
+        Vector<string> Begin = Col.get(start);  //extracted the value(which is a vector) associated with the key
+        int shuffle2 = randomInteger(0, Begin.size()-1); //generate a random index number
+        string next = Begin.get(shuffle2); //take a random string from the vector(which is the value of the map)
+
+        Vector<string> purify = stringSplit(start, ", ");  //starts with these words
+
+        for (int i = 0; i < purify.size()-1; i++){
+            final = final + " " + purify[i];
+        }
+        final = final + " " + next;
+        Begin.remove(0);
+        Begin.add(next);
+    }
+    ///////////////////////////////////
+
+    return final;
 }
 
 
